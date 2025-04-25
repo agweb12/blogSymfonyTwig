@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}S'inscrire au Blog Symfony{% endblock %}
+
+{% block main %}
+
+<div class="container-fluid w-100 d-flex flex-column justify-content-center align-items-center">
+    <h1> {{ titleH1 }} ✅</h1>
+
+    <h2>Formulaire</h2>
+    <div class="container d-flex flex-column justify-content-center align-items-center">
+        <div class="row border border-2 rounded-3 shadow-lg p-3 mb-5 bg-primary">
+            <div class="col-12">
+                <h3>Inscription</h3>
+                <p>Veuillez remplir le formulaire ci-dessous pour vous inscrire.</p>
+                {{ form(formInscription) }}
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

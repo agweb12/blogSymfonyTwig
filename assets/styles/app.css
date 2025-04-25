@@ -1,3 +1,28 @@
+:root {
+    color-scheme: light dark;
+    --primary-color: light-dark(#121212, #ffffff);
+    --backgroundcolor-primary: light-dark(#fff, #121212);
+    --font-family: 'Arial, sans-serif';
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 body {
-    background-color: skyblue;
+    background-color: var(--backgroundcolor-primary);
+    font-family: var(--font-family);
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    p,
+    a {
+        color: var(--primary-color);
+    }
 }
