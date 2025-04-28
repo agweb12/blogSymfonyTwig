@@ -2,10 +2,12 @@
 
 namespace App\Entity;
 
-use App\Repository\ProfilsRepository;
+use App\Entity\Users;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\ProfilsRepository;
 
+#[ORM\HasLifecycleCallbacks] // Annotation Permet de dire que la classe a des méthodes de cycle de vie c'est à dire des méthodes qui seront appelées automatiquement par Doctrine à des moments précis du cycle de vie de l'entité (ex: avant la création, avant la mise à jour, etc.)
 #[ORM\Entity(repositoryClass: ProfilsRepository::class)]
 class Profils
 {
@@ -32,6 +34,17 @@ class Profils
     #[ORM\OneToOne(inversedBy: 'profil', cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
     private ?Users $user = null;
+
+    public function __construct()
+    {
+        $this->createdAt = new \DateTimeImmutable('now', new \DateTimeZone('Europe/Paris'));
+    }
+
+    #[ORM\PreUpdate] // Signifie que la méthode annoté sera appelée juste avant que l'entité soit mise à jour dans la base de données c'est à dire avant le flush (exécution de l'update)
+    public function setUpdatedAtValue(): void
+    {
+        $this->updatedAt = new \DateTimeImmutable('now', new \DateTimeZone('Europe/Paris'));
+    }
 
     public function getId(): ?int
     {
@@ -98,12 +111,12 @@ class Profils
         return $this;
     }
 
-    public function getUser(): ?users
+    public function getUser(): ?Users
     {
         return $this->user;
     }
 
-    public function setUser(users $user): static
+    public function setUser(Users $user): static
     {
         $this->user = $user;
 

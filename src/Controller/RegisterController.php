@@ -16,6 +16,11 @@ final class RegisterController extends AbstractController
     #[Route('/register', name: 'app_register')]
     public function index(Request $request, UserPasswordHasherInterface $userPasswordHasherInterface, EntityManagerInterface $entityManager): Response // mécanisme d'injection de dépendance : Symfony va automatiquement créer une instance de la classe Request et l'injecter dans la méthode index() lorsque cette route est appelée. Cela permet d'accéder facilement aux données de la requête HTTP, comme les paramètres GET ou POST, les fichiers téléchargés, etc. 
     {
+        // conditionnel pour vérifier si l'utilisateur est déjà connecté
+        if ($this->getUser()) {
+            return $this->redirectToRoute('app_account');
+        }
+
         $user = new Users; // On crée un objet de la classe users et on le stocke dans la variable $user
         $form = $this->createForm(RegisterType::class, $user); // cette méthode prend en paramètres la classe du formulaire et l'objet gérer par le formulaire.
         $form->handleRequest($request); // On gère la requête HTTP pour le formulaire. Cela permet de lier les données du formulaire à l'objet $user. La méthode handleRequest() vérifie si le formulaire a été soumis et valide les données. Si le formulaire est soumis et valide, on peut ensuite enregistrer l'utilisateur dans la base de données.

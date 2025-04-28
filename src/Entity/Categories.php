@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
+#[ORM\HasLifecycleCallbacks] // Annotation Permet de dire que la classe a des méthodes de cycle de vie
 #[ORM\Entity(repositoryClass: CategoriesRepository::class)]
 class Categories
 {
@@ -40,6 +41,29 @@ class Categories
     public function __construct()
     {
         $this->article = new ArrayCollection();
+        $this->createdAt = new \DateTimeImmutable('now', new \DateTimeZone('Europe/Paris'));
+    }
+
+    public function __toString(): string
+    {
+        return $this->name;
+    } // Permet d'afficher le nom de la catégorie dans le select de l'admin
+
+    public function getColor(): string
+    {
+        return $this->colorCode;
+    } // Permet d'afficher la couleur de la catégorie dans le select de l'admin
+
+    public function setColor(string $color): static
+    {
+        $this->colorCode = $color;
+
+        return $this;
+}
+
+    #[ORM\PreUpdate] // Signifie que la méthode annoté sera appelée juste avant que l'entité soit mise à jour dans la base de données c'est à dire avant le flush (exécution de l'update)
+    public function setUpdatedAtValue(){
+        $this->updatedAt = new \DateTimeImmutable('now', new \DateTimeZone('Europe/Paris'));
     }
 
     public function getId(): ?int

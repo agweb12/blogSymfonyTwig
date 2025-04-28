@@ -12,18 +12,14 @@
 
     {% block stylesheets %}
     {% endblock %}
-
-    {% block javascripts %}
-    {% block importmap %}{{ importmap('app') }}{% endblock %}
-    {% endblock %}
 </head>
 
 <body>
     <header>
         <nav class="navbar navbar-expand-lg  bg-dark border-bottom border-bottom-dark" data-bs-theme="dark">
             <div class="container-fluid d-flex justify-content-between">
-                <a href="" class="navbar-brand w-50">
-                    <h1>Blog</h1>
+                <a href="{{path("app_home")}}" class="navbar-brand w-50">
+                    <p>Blog</p>
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false"
@@ -38,24 +34,32 @@
                                 No catégories
                             </a>
                             <ul class="dropdown-menu w-25" aria-labelledby="navbarDropdown">
-
-
                                 <li><a href="" class="nav-link ps-2 text-white"></a></li>
-
                             </ul>
                         </li>
+                        {# <li><a href="" class="nav-link ps-2 text-white">Backoffice</a></li> #}
+                        {# {{ dump(app.user) }} #}
+                        {% if app.user %}
+                            {# 1ere méthode: on utilise une boucle sur app.user.roles (un tableau) afin de gérer l'affichage du backoffice selon le rôle de l'utilisateur #}
+                            {# {% for role in app.user.roles %}
+                                {% if role == "ROLE_ADMIN" %}
+                                    <li><a href="{{path("admin")}}" class="nav-link ps-2 text-white">Backoffice</a></li>
+                                {% endif %}
+                            {% endfor %} #}
+                            {# Fin 1ère méthode #}
 
-                        <li><a href="" class="nav-link ps-2 text-white">Backoffice</a></li>
-
-                        <li><a href="" class="nav-link ps-2 text-white">Backoffice</a></li>
-
-
-                        <li><a href="" class="nav-link ps-2 text-white">Compte</a></li>
-                        <li><a href="" class="nav-link ps-2 text-white">Mes articles</a></li>
-                        <li><a href="" class="nav-link ps-2 text-white">Déconnexion</a></li>
-
-                        <li><a href="" class="nav-link ps-2 text-white">Inscription</a></li>
-                        <li><a href="" class="nav-link ps-2 text-white">Connexion</a></li>
+                            {# 2ème méthode : fonction is_granted qui pemet de vérifier les droits d'un utilisateur connecté #}
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <li><a href="{{path("admin")}}" class="nav-link ps-2 text-white">Backoffice</a></li>
+                            {% endif %}
+                            {# Fin 2ème méthode #}
+                            <li><a href="{{path("app_profils_index")}}" class="nav-link ps-2 text-white">Compte</a></li>
+                            <li><a href="" class="nav-link ps-2 text-white">Mes articles</a></li>
+                            <li><a href="{{path("app_logout")}}" class="nav-link ps-2 text-white">Déconnexion</a></li>
+                        {% else %}
+                            <li><a href="{{path("app_register")}}" class="nav-link ps-2 text-white">Inscription</a></li>
+                            <li><a href="{{path("app_login")}}" class="nav-link ps-2 text-white">Connexion</a></li>
+                        {% endif %}
                     </ul>
                 </div>
             </div>

@@ -2,12 +2,14 @@
 
 namespace App\Entity;
 
-use App\Repository\ArticlesRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use App\Entity\Users;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\ArticlesRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 
+#[ORM\HasLifecycleCallbacks] // Annotation Permet de dire que la classe a des méthodes de cycle de vie
 #[ORM\Entity(repositoryClass: ArticlesRepository::class)]
 class Articles
 {
@@ -34,12 +36,22 @@ class Articles
     /**
      * @var Collection<int, categories>
      */
-    #[ORM\ManyToMany(targetEntity: categories::class, inversedBy: 'article')]
-    private Collection $category; // Elle représente la liste des catégories de l'article
+    #[ORM\ManyToMany(targetEntity: Categories::class, inversedBy: 'article')]
+    private Collection $category;
+
+    #[ORM\ManyToOne(inversedBy: 'article')]
+    #[ORM\JoinColumn(nullable: false)] // Permet de dire que la colonne user_id ne peut pas être null
+    private ?Users $user = null;
 
     public function __construct()
     {
         $this->category = new ArrayCollection();
+        $this->createdAt = new \DateTimeImmutable('now', new \DateTimeZone('Europe/Paris'));
+    }
+
+    #[ORM\PreUpdate] // Signifie que la méthode annoté sera appelée juste avant que l'entité soit mise à jour dans la base de données c'est à dire avant le flush (exécution de l'update)
+    public function setUpdatedAtValue(){
+        $this->updatedAt = new \DateTimeImmutable('now', new \DateTimeZone('Europe/Paris'));
     }
 
     public function getId(): ?int
@@ -115,7 +127,7 @@ class Articles
         return $this->category;
     }
 
-    public function addCategory(categories $category): static
+    public function addCategory(Categories $category): static
     {
         if (!$this->category->contains($category)) {
             $this->category->add($category);
@@ -124,9 +136,21 @@ class Articles
         return $this;
     }
 
-    public function removeCategory(categories $category): static
+    public function removeCategory(Categories $category): static
     {
         $this->category->removeElement($category);
+
+        return $this;
+    }
+
+    public function getUser(): ?Users
+    {
+        return $this->user;
+    }
+
+    public function setUser(?Users $user): static
+    {
+        $this->user = $user;
 
         return $this;
     }

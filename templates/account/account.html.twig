@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Compte de {{app.user.firstName}}{% endblock %}
+
+{% block main %}
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+</style>
+
+<div class="example-wrapper">
+    <h1>Bonjour {{ app.user.firstName }}! Tu es bien connectée ✅</h1>
+        {% if profil is empty %}
+            <div class="text-center">
+                <a href="{{ path('app_profils_new', {'id': app.user.id}) }}" class="btn btn-warning">Compléter votre profil</a>
+            </div>
+        {% else %}
+            <table class="table mt-5 table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Prénom</th>
+                        <th>Nom</th>
+                        <th>Email</th>
+                        <th>Image</th>
+                        <th>Description</th>
+                        <th>Date de Naissance</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{ app.user.firstName }}</td>
+                        <td>{{ app.user.lastName }}</td>
+                        <td>{{ app.user.email }}</td>
+        
+                        {% for data in profil %}
+                        <td><img src="{{asset('images/profils/' ~ data.picture)}}" alt="Image du profil" class="img-fluid"></td>
+                        <td>{{ data.descriptif|slice(0, 30) ~ "..." }}</td>
+                        <td>{{ data.dateBirth|date("d/m/Y") }}</td>
+                        <td>
+                            <a href="{{ path('app_profils_edit', {'id': app.user.id}) }}" class="btn btn-info">Editer</a>
+                        </td>
+                        {% endfor %}
+                    </tr>
+                </tbody>
+            </table>
+        {% endif %}
+</div>
+{% endblock %}
