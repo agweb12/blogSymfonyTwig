@@ -54,6 +54,7 @@ class ArticlesCrudController extends AbstractCrudController
             IdField::new('id')->hideOnForm()->hideOnIndex(), // on cache l'id sur le formulaire et sur l'index dans le tableau
             TextField::new('title'),
             TextareaField::new('content'),
+            // Les méthodes de ImageField sont propres à EasyAdmin
             ImageField::new('image')->setBasePath('images/articles') // Chemin d'accès à l'image
                 ->setUploadDir('public/images/articles') // Répertoire de téléchargement de l'image c'est l echmin sur le serveur où easyAdmin va stocker les images stockées
                 ->setUploadedFileNamePattern('[randomhash].[extension]'), // Modèle de nom de fichier téléchargé

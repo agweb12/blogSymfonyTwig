@@ -31,10 +31,16 @@
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                                 data-bs-toggle="dropdown" aria-expanded="false">
-                                No catégories
+                                {% if categories is defined %}
+                                    <span class="badge bg-secondary">{{ categories|length }}</span> Catégories
+                                {% else %}
+                                    <span class="badge bg-secondary">0</span> Catégorie
+                                {% endif %}
                             </a>
                             <ul class="dropdown-menu w-25" aria-labelledby="navbarDropdown">
-                                <li><a href="" class="nav-link ps-2 text-white"></a></li>
+                                {% for category in categories %}
+                                    <li><a href="{{path("app_category_articles", {'id': category.id})}}" class="nav-link ps-2 text-white">{{ category.name }}</a></li>
+                                {% endfor %}
                             </ul>
                         </li>
                         {# <li><a href="" class="nav-link ps-2 text-white">Backoffice</a></li> #}
@@ -54,7 +60,7 @@
                             {% endif %}
                             {# Fin 2ème méthode #}
                             <li><a href="{{path("app_profils_index")}}" class="nav-link ps-2 text-white">Compte</a></li>
-                            <li><a href="" class="nav-link ps-2 text-white">Mes articles</a></li>
+                            <li><a href="{{path("app_my_articles")}}" class="nav-link ps-2 text-white">Mes articles</a></li>
                             <li><a href="{{path("app_logout")}}" class="nav-link ps-2 text-white">Déconnexion</a></li>
                         {% else %}
                             <li><a href="{{path("app_register")}}" class="nav-link ps-2 text-white">Inscription</a></li>

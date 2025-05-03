@@ -111,7 +111,7 @@ class Articles
     {
         return $this->updatedAt;
     }
-
+    
     public function setUpdatedAt(?\DateTimeImmutable $updatedAt): static
     {
         $this->updatedAt = $updatedAt;

@@ -1,18 +1,14 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Profils{% endblock %}
+{% block title %}Profil de {{ app.user.firstName }}{% endblock %}
 
 {% block main %}
-    <h1>Profils</h1>
+    <h1>Profil de {{ app.user.firstName }} {{ app.user.lastName }}</h1>
 
     <table class="table">
         <tbody>
             <tr>
-                <th>Id</th>
-                <td>{{ profil.id }}</td>
-            </tr>
-            <tr>
-                <th>Picture</th>
+                <th>Image</th>
                 <td>{{ profil.picture }}</td>
             </tr>
             <tr>
@@ -20,23 +16,20 @@
                 <td>{{ profil.descriptif }}</td>
             </tr>
             <tr>
-                <th>DateBirth</th>
-                <td>{{ profil.dateBirth ? profil.dateBirth|date('Y-m-d H:i:s') : '' }}</td>
+                <th>Date de Naissance</th>
+                <td>{{ profil.dateBirth ? profil.dateBirth|date('d/m/Y') : '' }}</td>
             </tr>
             <tr>
-                <th>CreatedAt</th>
+                <th>Date de Complétion du Profil</th>
                 <td>{{ profil.createdAt ? profil.createdAt|date('Y-m-d H:i:s') : '' }}</td>
             </tr>
             <tr>
-                <th>UpdatedAt</th>
+                <th>Date de Mise à jour du Profil</th>
                 <td>{{ profil.updatedAt ? profil.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
             </tr>
         </tbody>
     </table>
 
-    <a href="{{ path('app_profils_index') }}">back to list</a>
+    <a href="{{ path('app_profils_edit', {'id': profil.id}) }}" class="btn btn-warning mb-5">Editer ton profil</a>
 
-    <a href="{{ path('app_profils_edit', {'id': profil.id}) }}">edit</a>
-
-    {{ include('profils/_delete_form.html.twig') }}
 {% endblock %}

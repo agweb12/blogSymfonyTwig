@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Users;
 use App\Form\RegisterType;
+use App\Repository\CategoriesRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,7 +15,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 final class RegisterController extends AbstractController
 {
     #[Route('/register', name: 'app_register')]
-    public function index(Request $request, UserPasswordHasherInterface $userPasswordHasherInterface, EntityManagerInterface $entityManager): Response // mécanisme d'injection de dépendance : Symfony va automatiquement créer une instance de la classe Request et l'injecter dans la méthode index() lorsque cette route est appelée. Cela permet d'accéder facilement aux données de la requête HTTP, comme les paramètres GET ou POST, les fichiers téléchargés, etc. 
+    public function index(Request $request, UserPasswordHasherInterface $userPasswordHasherInterface, EntityManagerInterface $entityManager, CategoriesRepository $categoriesRepository): Response // mécanisme d'injection de dépendance : Symfony va automatiquement créer une instance de la classe Request et l'injecter dans la méthode index() lorsque cette route est appelée. Cela permet d'accéder facilement aux données de la requête HTTP, comme les paramètres GET ou POST, les fichiers téléchargés, etc. 
     {
         // conditionnel pour vérifier si l'utilisateur est déjà connecté
         if ($this->getUser()) {
@@ -38,9 +39,11 @@ final class RegisterController extends AbstractController
             // $this->addFlash('success', 'Votre compte a bien été créé !'); // On ajoute un message flash pour informer l'utilisateur que son compte a été créé avec succès. addFlash() est une méthode de la classe AbstractController qui permet d'ajouter un message flash à la session. Ces messages sont généralement utilisés pour afficher des notifications à l'utilisateur après une action, comme la soumission d'un formulaire ou la connexion.
             return $this->redirectToRoute('app_login'); // On redirige l'utilisateur vers la page de connexion après l'inscription réussie. redirectToRoute() est une méthode de la classe AbstractController qui permet de rediriger l'utilisateur vers une autre route définie dans l'application Symfony.
         }
+        $categories = $categoriesRepository->findAll(); // On récupère toutes les catégories
         return $this->render('register/register.html.twig', [ // C'est quoi render() exactement ? render() est une méthode de la classe AbstractController qui permet de rendre une vue Twig. Elle prend en paramètres le nom du fichier de la vue et un tableau associatif contenant les variables à passer à la vue.
             'titleH1' => 'Formulaire d\'inscription',
-            'formInscription' => $form->createView() // créer la vue du formulaire
+            'formInscription' => $form->createView(), // créer la vue du formulaire
+            'categories' => $categories, // On passe les catégories récupérées à la vue
         ]);
     }
 }

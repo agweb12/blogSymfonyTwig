@@ -31,7 +31,7 @@ class Profils
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $updatedAt = null;
 
-    #[ORM\OneToOne(inversedBy: 'profil', cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(inversedBy: 'profil', cascade: ['persist'])]
     #[ORM\JoinColumn(nullable: false)]
     private ?Users $user = null;
 

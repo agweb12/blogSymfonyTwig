@@ -3,11 +3,8 @@
 {% block title %}Edit Profils{% endblock %}
 
 {% block main %}
-    <h1>Edit Profils</h1>
+    <h1>Edite ton profil</h1>
 
     {{ include('profils/_form.html.twig', {'button_label': 'Update'}) }}
 
-    <a href="{{ path('app_profils_index') }}">back to list</a>
-
-    {{ include('profils/_delete_form.html.twig') }}
 {% endblock %}

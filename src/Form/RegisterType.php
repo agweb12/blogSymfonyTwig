@@ -87,10 +87,10 @@ class RegisterType extends AbstractType
                 ]
             ])
             // ->add('roles')
-            ->add('password', RepeatedType::class, [
+            ->add('password', RepeatedType::class, [ // RepeatedType permet de créer deux champs identiques pour le mot de passe et sa confirmation
                 'type' => PasswordType::class,
                 'required' => true,
-                'first_options' => [
+                'first_options' => [ // first_options et second_options permettent de créer deux champs différents
                     'label' => 'Mot de passe',
                     'attr' => [
                         'placeholder' => 'Entrez votre mot de passe',
@@ -132,12 +132,7 @@ class RegisterType extends AbstractType
                 'attr' => [
                     'class' => 'btn btn-primary'
                 ]
-            ])
-        //     ->add('profil', EntityType::class, [
-        //         'class' => Profils::class,
-        //         'choice_label' => 'id',
-        //     ])
-        ;
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

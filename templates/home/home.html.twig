@@ -1,36 +1,73 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello HomeController!{% endblock %}
+{% block title %}{{ title }}{% endblock %}
 
 {% block main %}
-<style>
-    .example-wrapper {
-        margin: 1em auto;
-        max-width: 800px;
-        width: 95%;
-        font: 18px/1.5 sans-serif;
-    }
-
-    .example-wrapper code {
-        background: #F5F5F5;
-        padding: 2px 6px;
-    }
-</style>
-
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
-
-    {#
-    HomeController is the name of the controller class
-    {{........}} permet l'affichage d'une expression
-    {%........%} permet d'exécuter une action (une boucle, une condition...)
-    {#......#} {#permet d'écrire des commentaires
-    #}
-
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>C:/laragon/www/blog/src/Controller/HomeController.php</code></li>
-        <li>Your template at <code>C:/laragon/www/blog/templates/home/index.html.twig</code></li>
-    </ul>
+<div class="text-center my-5">
+    <h2>{{ title }}</h2>
+    <p class="lead">{{ description }}</p>
+    {# {{ dump(articleRecents) }} #}
+    {% if oneArticle is defined %}
+        <div class="card mb-3">
+            <img src="{{asset("images/articles/" ~ oneArticle.image)}}" class="card-img-top h-auto object-fit-cover" alt="" width="300" height="200">
+            <div class="card-body">
+                <h5 class="card-title">{{ oneArticle.title }}</h5>
+                <p class="card-text">{{ oneArticle.content }}</p>
+                <h6 class="card-text"> Article créé le : <small class="text-body-secondary">{{ oneArticle.createdAt ? oneArticle.createdAt|date('Y-m-d H:i:s') : '' }}</small></h6>
+                <h6 class="card-text"> Article mis à jour le : <small class="text-body-secondary">{{ oneArticle.updatedAt ? oneArticle.updatedAt|date('Y-m-d H:i:s') : '' }}</small></h6>
+                <a href="{{ path('app_one_article', {'id': oneArticle.id}) }}" class="btn btn-primary">Voir</a>
+            </div>
+        </div>
+    {% else %}
+    <div class="row d-flex justify-content-start align-items-start">
+        {% if articleRecents is defined %}
+            {% for article in articleRecents %}
+            <div class="col-sm-4 m-auto">
+                <div class="card mb-3">
+                    <img src="{{asset("images/articles/" ~ article.image)}}" class="card-img-top object-fit-cover" alt="" width="300" height="200">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ article.title }}</h5>
+                        <p class="card-text">{{ article.content|slice(0,100) }}</p>
+                        <h6 class="card-text"> Article créé le : <small class="text-body-secondary">{{ article.createdAt ? article.createdAt|date('Y-m-d H:i:s') : '' }}</small></h6>
+                        <h6 class="card-text"> Article mis à jour le : <small class="text-body-secondary">{{ article.updatedAt ? article.updatedAt|date('Y-m-d H:i:s') : '' }}</small></h6>
+                        <a href="{{ path('app_one_article', {'id': article.id}) }}" class="btn btn-primary">Voir</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            <div class="text-center my-3">
+                <a href="{{ path('app_home_allArticles') }}" class="btn btn-primary">Voir plus</a>
+            </div>
+        {% elseif articles is defined %}
+            {% for article in articles %}
+            <div class="col-sm-4 m-auto">
+                <div class="card mb-3">
+                    <img src="{{asset("images/articles/" ~ article.image)}}" class="card-img-top " alt="" width="300" height="200">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ article.title }}</h5>
+                        <p class="card-text">{{ article.content|slice(0,100) }}</p>
+                        <h6 class="card-text"> Article créé le : <small class="text-body-secondary">{{ article.createdAt ? article.createdAt|date('Y-m-d H:i:s') : '' }}</small></h6>
+                        <h6 class="card-text"> Article mis à jour le : <small class="text-body-secondary">{{ article.updatedAt ? article.updatedAt|date('Y-m-d H:i:s') : '' }}</small></h6>
+                        <a href="{{ path('app_one_article', {'id': article.id}) }}" class="btn btn-primary">Voir</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            {% if app.user %}
+            <div class="text-center my-3">
+                <a href="{{ path('app_articles_new') }}" class="btn btn-primary">Créer un nouvel article</a>
+            </div>
+            <div>
+                <p colspan="7">Aucun Article trouvé pour vous</p>
+            </div>
+            {% else %}
+            <div>
+                <p colspan="7">Aucun Article trouvé pour vous</p>
+            </div>
+            {% endif %}
+        {% endif %}
+    </div>
+    {% endif %}
 </div>
 {% endblock %}

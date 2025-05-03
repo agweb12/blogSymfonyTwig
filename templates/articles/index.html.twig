@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Articles index{% endblock %}
+
+{% block main %}
+    <h1>Mes Articles</h1>
+
+    <div class="row">
+        {% for article in articles %}
+        <div class="col-sm-4 m-auto">
+            <div class="card mb-3">
+                <img src="{{asset("images/articles/" ~ article.image)}}" class="card-img-top h-auto" alt="" widht="300">
+                <div class="card-body">
+                    <h5 class="card-title">{{ article.title }}</h5>
+                    <p class="card-text">{{ article.content|slice(0,100) }}</p>
+                    <h6 class="card-text"> Article créé le : <small class="text-body-secondary">{{ article.createdAt ? article.createdAt|date('Y-m-d H:i:s') : '' }}</small></h6>
+                    <h6 class="card-text"> Article mis à jour le : <small class="text-body-secondary">{{ article.updatedAt ? article.updatedAt|date('Y-m-d H:i:s') : '' }}</small></h6>
+                    <a href="{{ path('app_articles_show', {'id': article.id}) }}" class="btn btn-primary">Voir</a>
+                    <a href="{{ path('app_articles_edit', {'id': article.id}) }}" class="btn btn-warning">Modifier</a>
+                    {{include('articles/_delete_form.html.twig')}}
+                </div>
+            </div>
+        </div>
+        {% else %}
+            <div>
+                <p colspan="7">Aucun Article trouvé pour vous</p>
+            </div>
+        {% endfor %}
+    </div>
+
+
+    <a href="{{ path('app_articles_new') }}" class="btn btn-primary">Créer un nouvel article</a>
+{% endblock %}
